@@ -42,6 +42,17 @@ function load_data(file) {
     /* generate array of arrays */
     data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header:1});
     console.log(data);
+
+
+}
+
+function load_data2(file) {
+    var wb = XLSX.readFile(file);
+    /* generate array of arrays */
+    data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header:1});
+    console.log(data);
+
+    return data;
 }
 
 function post_data(req, res) {
@@ -57,7 +68,15 @@ function post_file(req, res, file) {
 app.use(logit.mw);
 app.use(cors.mw);
 app.use(require('express-formidable')());
+
 app.get('/', function(req, res, next) {
+
+  var data =  load_data2('数据统计.xlsx')
+
+    res.json('测试');
+});
+
+/*app.get('/', function(req, res, next) {
     var url = URL.parse(req.url, true);
     if(url.query.t) return get_data(req, res, url.query.t);
     else if(url.query.f) return get_file(req, res, url.query.f);
@@ -67,7 +86,7 @@ app.post('/', function(req, res, next) {
     var url = URL.parse(req.url, true);
     if(url.query.f) return post_file(req, res, url.query.f);
     return post_data(req, res);
-});
+});*/
 
 var port = +process.argv[2] || +process.env.PORT || 3000;
 app.listen(port, function() { console.log('Serving HTTP on port ' + port); });
